@@ -4,7 +4,8 @@ EXTRA_DIST = \
     goal.desktop \
     README \
     AUTHORS \
-    TODO
+    TODO \
+    COPYING
     
 Applicationsdir = $(datadir)/gnome/apps/Games
 Applications_DATA = goal.desktop
