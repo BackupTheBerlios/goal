@@ -724,23 +724,22 @@ terminate_game(GoalApp *app)
 		msg = g_strdup_printf(_("Game finished.\nYou left %i pieces on the board.\nStart a new game?"), number_of_pieces);
 
 	
-	app->gui.GameFinishedMsgBox = gnome_message_box_new(msg,
-			GNOME_MESSAGE_BOX_QUESTION,
-			GNOME_STOCK_BUTTON_YES,
-			GNOME_STOCK_BUTTON_NO,
-			NULL);
+	app->gui.GameFinishedMsgBox = gtk_message_dialog_new(GTK_WINDOW(app->gui.MainWindow),
+				GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO,
+				GTK_BUTTONS_YES_NO,
+				msg);
 
+	ret = gtk_dialog_run(GTK_DIALOG(app->gui.GameFinishedMsgBox));
+		
+	gtk_widget_destroy(app->gui.GameFinishedMsgBox);
+	
 	g_free(msg);
 	
-	gtk_widget_show(app->gui.GameFinishedMsgBox);
-
-	gtk_window_set_modal(GTK_WINDOW(app->gui.GameFinishedMsgBox), TRUE);
 	
-	ret = gnome_dialog_run(GNOME_DIALOG(app->gui.GameFinishedMsgBox));
-
 	switch (ret)
 	{
-		case 0 : /* YES button pressed */
+		case GTK_RESPONSE_YES : /* YES button pressed */
 			init_new_game(app);
 			app->game.GameIsRunning = TRUE;
 			app->game.JumpStarted = FALSE;
@@ -753,7 +752,7 @@ terminate_game(GoalApp *app)
 			gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar), _("New game started."));
 
 			break;
-		case 1 : /* NO button pressed */
+		case GTK_RESPONSE_NO : /* NO button pressed */
 			break;
 		default: /* dialog closed by window manager */
 			break;

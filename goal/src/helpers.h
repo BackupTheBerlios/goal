@@ -15,6 +15,6 @@ void delete_theme_list(GoalApp *app);
 int put_theme_to_preview_canvas(GoalApp *app, gint theme_number);
 void set_arrow_buttons(GoalApp *app);
 void destroy_property_box_canvas_items(GoalApp *app);
-
+void update_gui(GoalApp *app);
 
 #endif /* __GOAL_HELPERS_H__ */

@@ -68,7 +68,10 @@ typedef struct
 			*PropertyBoxButtonLeft,
 			*PropertyBoxButtonRight,
 			*PropertyBoxCanvas,
-			*PropertyBoxLabelThemeName;
+			*PropertyBoxLabelThemeName,
+			*PropertyBoxButtonCancel,
+			*PropertyBoxButtonApply,
+			*PropertyBoxButtonOK;
 
 		GnomeCanvasItem *Wallpaper,
 			*PieceNormal[NUMBER_CELLS][NUMBER_CELLS], /* the "normal" piece */
@@ -86,7 +89,6 @@ typedef struct
 			*PropertyBoxPieceNegativ,
 			*PropertyBoxPieceEmptyPositiv,
 			*PropertyBoxPieceEmptyNegativ;
-			
 			
 		gint WallpaperHeight, WallpaperWidth;
 		gint PieceHeight, PieceWidth;
@@ -117,7 +119,9 @@ typedef struct
 	/*  */
 	GList *ThemeList;
 	gint NumberOfThemes,
-		PropertyBoxCurrentThemeNumber;
+		PropertyBoxCurrentThemeNumber,
+		PropertyBoxTmpThemeNumber;
+	GnomeProgram *Goal;
 
 	
 	
