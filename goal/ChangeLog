@@ -1,0 +1,8 @@
+* 2002-12-08 : switched to gnome 2.0 (e.g. new about dialog, 
+					new dialogs, 
+					switched from gtk_signal_connect to g_signal_connect,
+					switched from gnome_init to gnome_program_init,
+					add autogen.sh,
+					removed intl/ and macro/ directorys,
+					modified configure.in, 
+					and some other minor changes)

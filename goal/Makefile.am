@@ -1,4 +1,4 @@
-SUBDIRS = macros intl pixmaps src po
+SUBDIRS = pixmaps src po
 
 EXTRA_DIST = \
     goal.desktop \
