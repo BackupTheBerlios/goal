@@ -1,6 +1,5 @@
 #include <config.h>
 #include "callbacks.h"
-#include "typedefs.h"
 #include "game.h"
 #include "property.h"
 #include "helpers.h"
@@ -39,6 +38,8 @@ goal_exit(gpointer data)
 		if(ret) return TRUE;
 	}
 	
+
+		save_settings(app);
 	
 		gtk_main_quit();
 	
@@ -498,6 +499,7 @@ toggle_show_board_hints_cb(GtkWidget *widget, gpointer data)
 		else
 		{
 			gnome_canvas_item_hide(app->gui.PieceTouched);
+			gnome_canvas_item_hide(app->gui.PieceEmpty);
 		}
 	}
 }
@@ -519,12 +521,27 @@ menubar_help_menu_properties_item_cb(GtkWidget *widget, gpointer data)
 	gint ret;
 
 	app = (GoalApp *) data;
+
+
+	app->PropertyBoxCurrentThemeNumber = 1;
 	
-	ret = create_theme_list(app);
-	
+	/* load the pixmaps and put they into the gnomecanvas */
+	if((ret = create_theme_list(app)) != 0)
+		g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading theme (ERROR:%i)\n" , PACKAGE, __FILE__, __LINE__, ret);
+
+
 	create_PropertyBox(app);
 
+	set_arrow_buttons(app);
+
+	/* draw the board in the preview canvas */
+	put_theme_to_preview_canvas(app, app->PropertyBoxCurrentThemeNumber);
+
 	gtk_widget_show_all(app->gui.PropertyBox);
+
+	/* */
+	gnome_property_box_changed(GNOME_PROPERTY_BOX(app->gui.PropertyBox));
+
 
 }
 
@@ -541,7 +558,25 @@ menubar_help_menu_properties_item_cb(GtkWidget *widget, gpointer data)
 void
 property_left_arrow_button_press_event_cb(GtkWidget *widget, gpointer data)
 {
-	g_print("left\n");
+
+	GoalApp *app;
+
+
+	app = (GoalApp *) data;
+
+	app->PropertyBoxCurrentThemeNumber--;
+
+	set_arrow_buttons(app);
+
+	/* destroy the property box canvas items */
+	destroy_property_box_canvas_items(app);
+	
+	/*  */ 
+	put_theme_to_preview_canvas(app, app->PropertyBoxCurrentThemeNumber);
+
+
+	/* */
+	gnome_property_box_changed(GNOME_PROPERTY_BOX(app->gui.PropertyBox));
 }
 
 
@@ -560,5 +595,112 @@ property_left_arrow_button_press_event_cb(GtkWidget *widget, gpointer data)
 void
 property_right_arrow_button_press_event_cb(GtkWidget *widget, gpointer data)
 {
-	g_print("right\n");
+	GoalApp *app;
+
+
+	app = (GoalApp *) data;
+
+	app->PropertyBoxCurrentThemeNumber++;
+
+	set_arrow_buttons(app);
+	
+	/* destroy the property box canvas items */
+	destroy_property_box_canvas_items(app);
+	
+	/*  */ 
+	put_theme_to_preview_canvas(app, app->PropertyBoxCurrentThemeNumber);
+
+	/* */
+	gnome_property_box_changed(GNOME_PROPERTY_BOX(app->gui.PropertyBox));
 }
+
+
+
+/**
+ * property_box_apply_event_cb:
+ * @widget:
+ * @page_number:
+ * @data:
+ *
+ * function description:
+ *
+ * return values:
+ */
+void 
+property_box_apply_event_cb(GtkWidget *widget, gint page_number, gpointer data)
+{
+	GoalApp *app;
+	gint x, y;
+
+	app = (GoalApp *) data;
+
+
+	/* we have only one property page, thats why we recieve page number 0 and -1, but we only react at -1 */
+	if(page_number != -1) return;
+
+
+	/* update theme number */
+	app->game.DefaultThemeNumber = app->PropertyBoxCurrentThemeNumber;
+	/* load the pixmaps */	
+	if(load_pixmaps(app))
+	{
+			g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading themes\n" , PACKAGE, __FILE__, __LINE__);
+	}
+
+	
+	/* --- update the gui --- */
+	/* hide the "helper" pieces */
+	gnome_canvas_item_hide(app->gui.PieceEmpty);
+	gnome_canvas_item_hide(app->gui.PieceMarked);
+	gnome_canvas_item_hide(app->gui.PieceTouched);
+	gnome_canvas_item_hide(app->gui.PieceNegativ);
+	gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
+	gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
+
+	/* set important variables */
+	app->game.JumpStartPosX = 0;
+	app->game.JumpStartPosY = 0;
+	app->game.MovePosX = 0;
+	app->game.MovePosY = 0;
+	app->game.JumpStarted = FALSE;
+	
+	for(x = 0; x < NUMBER_CELLS; x++)
+	{
+		for(y = 0; y < NUMBER_CELLS; y++)
+		{
+			if((app->game.CellStatus[x][y] != OCCUPIED) && (app->game.CellStatus[x][y] != UNKOWN))
+			{
+				gnome_canvas_item_hide(app->gui.PieceNormal[x][y]);
+				/*g_print("gui update x=%i-y=%i\n",x,y);*/
+			}
+
+		}
+	}
+
+
+	save_settings(app);
+	
+}
+
+
+/**
+ * property_box_destroy_event_cb:
+ * @property_box:
+ * @data:
+ *
+ * function description:
+ *
+ * return values: nothing
+ */
+void 
+property_box_destroy_event_cb(GnomeDialog *property_box, gpointer data)
+{
+	GoalApp *app;
+
+	app = (GoalApp *) data;
+
+	/* destroy theme list */
+	delete_theme_list(app);
+}
+
+

@@ -25,7 +25,7 @@ void toggle_show_board_hints_cb(GtkWidget *widget, gpointer data);
 void menubar_help_menu_properties_item_cb(GtkWidget *widget, gpointer data);
 void property_left_arrow_button_press_event_cb(GtkWidget *widget, gpointer data);
 void property_right_arrow_button_press_event_cb(GtkWidget *widget, gpointer data);
-
-
+void property_box_apply_event_cb(GtkWidget *widget, gint page_number, gpointer data);
+void property_box_destroy_event_cb(GnomeDialog *property_box, gpointer data);
 
 #endif /* __GOAL_CALLBACKS_H__ */

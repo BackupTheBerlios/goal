@@ -247,6 +247,7 @@ void init_new_game(GoalApp *app)
 			}
 
 	/* hide the "helper" pieces */
+	gnome_canvas_item_hide(app->gui.PieceEmpty);
 	gnome_canvas_item_hide(app->gui.PieceMarked);
 	gnome_canvas_item_hide(app->gui.PieceTouched);
 	gnome_canvas_item_hide(app->gui.PieceNegativ);
@@ -282,8 +283,8 @@ valid_move(GoalApp *app, gint from_x, gint from_y, gint to_x, gint to_y)
     
 
    /* preconditions */
-    if((/*on_board(from_x, from_y)*/app->game.CellStatus[from_x][from_y] != UNKOWN) &&
-       (/*on_board(to_x, to_y)*/ app->game.CellStatus[to_x][to_y] != UNKOWN) &&
+    if((/**/app->game.CellStatus[from_x][from_y] != UNKOWN) &&
+       (/**/ app->game.CellStatus[to_x][to_y] != UNKOWN) &&
        (/**/app->game.CellStatus[to_x][to_y] == EMPTY) &&
        (/**/app->game.CellStatus[from_x][from_y] == OCCUPIED) &&
        ((from_x == to_x) || (from_y == to_y)))
@@ -297,7 +298,7 @@ valid_move(GoalApp *app, gint from_x, gint from_y, gint to_x, gint to_y)
 			diff = from_y + 1;
 		else 
 			diff= from_y - 1;
-		if(/*board[from_x][diff].status == OCCUPIED*/app->game.CellStatus[from_x][diff] == OCCUPIED) 
+		if(app->game.CellStatus[from_x][diff] == OCCUPIED) 
 			return TRUE;
 		else 
 			return FALSE;
@@ -314,7 +315,7 @@ valid_move(GoalApp *app, gint from_x, gint from_y, gint to_x, gint to_y)
 			diff = from_x + 1;
 		else 
 			diff= from_x - 1;
-		if(/*board[diff][from_y].status == OCCUPIED*/app->game.CellStatus[diff][from_y] == OCCUPIED) 
+		if(app->game.CellStatus[diff][from_y] == OCCUPIED) 
 			return TRUE;
 		else 
 			return FALSE;
@@ -442,18 +443,43 @@ play(GoalApp *app, gint x, gint y)
 			if(valid_move(app, app->game.JumpStartPosX, app->game.JumpStartPosY, x, y))
 			{/* great, this is an valid move */
 				make_move(app, app->game.JumpStartPosX, app->game.JumpStartPosY, x, y);
+				gnome_canvas_item_set(app->gui.PieceTouched, 
+						"x", (double)(x * app->gui.PieceWidth),
+						"y", (double)(y * app->gui.PieceHeight),
+						NULL);
+				gnome_canvas_item_show(app->gui.PieceTouched);
 			}
 			else
-			{/* failure */
+			{/* --------------------
+			    failure !!!!!!!!!!!!!!!!!!!!
+   			    -------------------- */
 
 				gnome_canvas_item_show(app->gui.PieceNormal[app->game.JumpStartPosX][app->game.JumpStartPosY]);
+				
+				if(app->game.CellStatus[x][y] == OCCUPIED)
+				{
+					gnome_canvas_item_set(app->gui.PieceTouched, 
+						"x", (double)(x * app->gui.PieceWidth),
+						"y", (double)(y * app->gui.PieceHeight),
+						NULL);
+					gnome_canvas_item_show(app->gui.PieceTouched);
+				}
+				else
+				{
+					gnome_canvas_item_set(app->gui.PieceEmpty, 
+						"x", (double)(x * app->gui.PieceWidth),
+						"y", (double)(y * app->gui.PieceHeight),
+						NULL);
+					gnome_canvas_item_show(app->gui.PieceEmpty);
+				}
 			}
 			
 			app->game.JumpStarted = FALSE;
 			app->game.JumpStartPosX = 0;
 			app->game.JumpStartPosY = 0;
 			gnome_canvas_item_hide(app->gui.PieceMarked);
-					}
+			gnome_canvas_item_hide(app->gui.PieceEmpty);
+		}
 		else
 		{/* begin a new jump */
 			if(app->game.CellStatus[x][y] == OCCUPIED)
@@ -478,12 +504,20 @@ play(GoalApp *app, gint x, gint y)
 			gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
 			gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
 		}
+
+		
 	}
 	else
 	{/* --------------------------------->>>>>>>>>>>>>>>>> only used for "solitaire" game type */
 		remove_piece(app, x, y);
 		app->game.FirstPieceRemoved = TRUE;
 		gnome_canvas_item_hide(app->gui.PieceTouched);
+		gnome_canvas_item_set(app->gui.PieceEmpty, 
+					"x", (double)(x * app->gui.PieceWidth),
+					"y", (double)(y * app->gui.PieceHeight),
+					NULL);
+		gnome_canvas_item_show(app->gui.PieceEmpty);
+
 	}
 
 
@@ -544,7 +578,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 							"y", (double)(y * app->gui.PieceHeight),
 							NULL);
 						gnome_canvas_item_show(app->gui.PieceTouched);
-
+						gnome_canvas_item_hide(app->gui.PieceEmpty);
 					}
 				}
 				else
@@ -562,6 +596,11 @@ show_board_hints(GoalApp *app, gint x, gint y)
 						else
 						{
 							gnome_canvas_item_hide(app->gui.PieceTouched);
+							gnome_canvas_item_set(app->gui.PieceEmpty, 
+								"x", (double)(x * app->gui.PieceWidth),
+								"y", (double)(y * app->gui.PieceHeight),
+								NULL);
+							gnome_canvas_item_show(app->gui.PieceEmpty);
 						}
 					}
 					else
@@ -577,6 +616,11 @@ show_board_hints(GoalApp *app, gint x, gint y)
 						else
 						{
 							gnome_canvas_item_hide(app->gui.PieceTouched);
+							gnome_canvas_item_set(app->gui.PieceEmpty, 
+								"x", (double)(x * app->gui.PieceWidth),
+								"y", (double)(y * app->gui.PieceHeight),
+								NULL);
+							gnome_canvas_item_show(app->gui.PieceEmpty);
 						}
 
 					}
@@ -592,9 +636,15 @@ show_board_hints(GoalApp *app, gint x, gint y)
 					"y", (double)(y * app->gui.PieceHeight),
 					NULL);
 				gnome_canvas_item_show(app->gui.PieceTouched);
+				gnome_canvas_item_hide(app->gui.PieceEmpty);
 			}
 			else
 		  	{
+				gnome_canvas_item_set(app->gui.PieceEmpty, 
+					"x", (double)(x * app->gui.PieceWidth),
+					"y", (double)(y * app->gui.PieceHeight),
+					NULL);
+				gnome_canvas_item_show(app->gui.PieceEmpty);
 		    		gnome_canvas_item_hide(app->gui.PieceTouched);
 		  	}
 		}

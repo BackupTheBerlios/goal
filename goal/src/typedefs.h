@@ -37,6 +37,7 @@ typedef struct
 	gchar *ThemeName,
 		*PathToPixmapWallpaper,
 		*PathToPixmapPieceNormal,
+		*PathToPixmapPieceEmpty,
 		*PathToPixmapPieceMarked,
 		*PathToPixmapPieceTouched,
 		*PathToPixmapPieceNegativ,
@@ -48,7 +49,7 @@ typedef struct
 
 
 /* this struct holds the app */
-typedef struct
+typedef struct 
 {
 
 
@@ -65,15 +66,25 @@ typedef struct
 			*PropertyBox,
 			*PropertyBoxButtonLeft,
 			*PropertyBoxButtonRight,
-			*PropertyBoxCanvas;
+			*PropertyBoxCanvas,
+			*PropertyBoxLabelThemeName;
 
 		GnomeCanvasItem *Wallpaper,
 			*PieceNormal[NUMBER_CELLS][NUMBER_CELLS], /* the "normal" piece */
+			*PieceEmpty,
 			*PieceMarked,         /* the selected piece, with this piece you will jump */
 			*PieceTouched,        /* only cosmetic, highlight the piece if no move is selectet */
 			*PieceNegativ,        /* you can not jump onto this place */
 			*PieceEmptyPositiv,   /* found an empty place, jump !!!!!!! */
-			*PieceEmptyNegativ;   /* found an empty place, but you can not jump */
+			*PieceEmptyNegativ,   /* found an empty place, but you can not jump */
+			*PropertyBoxWallpaper /* */,
+			*PropertyBoxPieceNormal,
+			*PropertyBoxPieceEmpty,
+			*PropertyBoxPieceMarked,
+			*PropertyBoxPieceTouched,
+			*PropertyBoxPieceNegativ,
+			*PropertyBoxPieceEmptyPositiv,
+			*PropertyBoxPieceEmptyNegativ;
 			
 			
 		gint WallpaperHeight, WallpaperWidth;
@@ -86,7 +97,7 @@ typedef struct
 	/* the game management */
 	struct
 	{
-		gchar *ThemeName;
+		gint DefaultThemeNumber;
 		gboolean GameIsRunning,
 			FirstPieceRemoved,
 			JumpStarted,
@@ -104,7 +115,9 @@ typedef struct
 	
 	/*  */
 	GList *ThemeList;
-	guint NumberOfThemes;
+	gint NumberOfThemes,
+		PropertyBoxCurrentThemeNumber;
+
 	
 	
 } GoalApp;

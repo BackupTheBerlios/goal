@@ -11,7 +11,7 @@
  * create_PropertyBox: 
  * @app: the application struct
  * 
- * function description: load the settings
+ * function description: 
  *
  * return values: nothing 
  */
@@ -25,7 +25,7 @@ create_PropertyBox(GoalApp *app)
 	GtkWidget *vbox1;
 	GtkWidget *hbox2;
 	GtkWidget *ArrowLeft;
-	GtkWidget *LabelThemeName;
+	/*GtkWidget *LabelThemeName;*/
 	GtkWidget *ArrowRight;
 	GtkWidget *scrolledwindow1;
 	GtkWidget *LabelTheme;
@@ -84,13 +84,15 @@ create_PropertyBox(GoalApp *app)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_container_add (GTK_CONTAINER (app->gui.PropertyBoxButtonLeft), ArrowLeft);
 
-  LabelThemeName = gtk_label_new (_("theme name"));
-  gtk_widget_set_name (LabelThemeName, "LabelThemeName");
-  gtk_widget_ref (LabelThemeName);
-  gtk_object_set_data_full (GTK_OBJECT (app->gui.PropertyBox), "LabelThemeName", LabelThemeName,
+
+  /* --- theme name label --- */
+  app->gui.PropertyBoxLabelThemeName = gtk_label_new (_("theme name"));
+  gtk_widget_set_name (app->gui.PropertyBoxLabelThemeName, "LabelThemeName");
+  gtk_widget_ref(app->gui.PropertyBoxLabelThemeName);
+  gtk_object_set_data_full (GTK_OBJECT (app->gui.PropertyBox), "LabelThemeName", app->gui.PropertyBoxLabelThemeName,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (LabelThemeName);
-  gtk_box_pack_start (GTK_BOX (hbox2), LabelThemeName, TRUE, TRUE, 0);
+  gtk_widget_show (app->gui.PropertyBoxLabelThemeName);
+  gtk_box_pack_start (GTK_BOX (hbox2), app->gui.PropertyBoxLabelThemeName, TRUE, TRUE, 0);
 
   /* --- button right --- */
   app->gui.PropertyBoxButtonRight = gtk_button_new ();
@@ -145,13 +147,19 @@ create_PropertyBox(GoalApp *app)
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (NotebookTheme), gtk_notebook_get_nth_page (GTK_NOTEBOOK (NotebookTheme), 0), LabelTheme);
 
   /* --- connect to signal handlers --- */
-  gtk_signal_connect (GTK_OBJECT(app->gui.PropertyBoxButtonLeft), "button_press_event",
-                      GTK_SIGNAL_FUNC (property_left_arrow_button_press_event_cb),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (app->gui.PropertyBoxButtonRight), "button_press_event",
-                      GTK_SIGNAL_FUNC (property_right_arrow_button_press_event_cb),
-                      NULL);
-
+	gtk_signal_connect (GTK_OBJECT(app->gui.PropertyBoxButtonLeft), "clicked", 
+			GTK_SIGNAL_FUNC (property_left_arrow_button_press_event_cb),
+			app);
+	gtk_signal_connect (GTK_OBJECT (app->gui.PropertyBoxButtonRight), "clicked",
+			GTK_SIGNAL_FUNC (property_right_arrow_button_press_event_cb),
+                      	app);
+	gtk_signal_connect(GTK_OBJECT(app->gui.PropertyBox), "apply",
+			GTK_SIGNAL_FUNC(property_box_apply_event_cb),
+			app);
+	/* we need this only to know when this property box is destroyed */
+	gtk_signal_connect(GTK_OBJECT(app->gui.PropertyBox), "destroy",
+			GTK_SIGNAL_FUNC(property_box_destroy_event_cb),
+			app);
   /* --- set sensitiv --- */
   gtk_widget_set_sensitive(app->gui.PropertyBoxButtonRight, FALSE);
   gtk_widget_set_sensitive(app->gui.PropertyBoxButtonLeft, FALSE);

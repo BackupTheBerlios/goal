@@ -7,7 +7,8 @@
 gint
 main(gint argc, gchar **argv)
 {
-GoalApp *app;
+	static GoalApp *app;
+
 
 	/* i18n */
 	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
