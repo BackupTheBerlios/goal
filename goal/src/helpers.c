@@ -618,7 +618,7 @@ create_theme_list(GoalApp *app)
 		
 
 	/*g_print("create_theme_list: ");*/
-	theme_path = "/home/sebastian/projects/goal/pixmaps"/*gnome_unconditional_pixmap_file("goal")*/;
+	theme_path = /*"/home/sebastian/projects/goal/pixmaps"*/gnome_unconditional_pixmap_file("goal");
 	/*g_print("%s\n", theme_path);*/
 	
 	
