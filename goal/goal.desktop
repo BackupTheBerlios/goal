@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Goal
+Comment=Gnome Solo Halma
+Exec=goal
+Terminal=0
+Type=Application
