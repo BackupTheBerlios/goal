@@ -520,13 +520,11 @@ play(GoalApp *app, gint x, gint y)
 
 	}
 
-
+	/* ------------------------------------------->>>>>>>>>>>>>>>>>>>>>> terminate the game <<<<<<<<<<<<<<<<<<<<<<<< ---------*/
 	if(!one_move_possible(app))
 	{/* no jump possible, finish this game */
 		g_print("game finished\n");
-		app->game.GameIsRunning = FALSE;
-		app->game.JumpStarted = FALSE;
-		app->game.FirstPieceRemoved = FALSE;
+		terminate_game(app);
 	}
 }
 
@@ -665,4 +663,78 @@ show_board_hints(GoalApp *app, gint x, gint y)
 }
 
 
+
+/**
+ * terminate_game:
+ * @app:
+ *
+ * function description:
+ *
+ * return values: nothing
+ */
+void 
+terminate_game(GoalApp *app)
+{
+	gint number_of_pieces;	
+	gchar *msg;
+
+	
+	app->game.GameIsRunning = FALSE;
+	app->game.JumpStarted = FALSE;
+	app->game.FirstPieceRemoved = FALSE;
+
+	/* get the number of pieces */
+	number_of_pieces = count_pieces(app);
+	
+	/* build the message string */
+	if(number_of_pieces == 1)
+		if(app->game.GameType == SOLITAIRE)
+			msg = g_strdup_printf(_("Game finished.\nYou left %i piece on the board.\nYou are a Solitaire champion!Start a new game?"), number_of_pieces);
+		else
+			msg = g_strdup_printf(_("Game finished.\nYou left %i piece on the board.\nStart a new game?"), number_of_pieces);
+	else
+		msg = g_strdup_printf(_("Game finished.\nYou left %i pieces on the board.\nStart a new game?"), number_of_pieces);
+
+	
+	app->gui.GameFinishedMsgBox = gnome_message_box_new(msg,
+			GNOME_MESSAGE_BOX_QUESTION,
+			GNOME_STOCK_BUTTON_YES,
+			GNOME_STOCK_BUTTON_NO,
+			NULL);
+
+	g_free(msg);
+	
+	gtk_widget_show(app->gui.GameFinishedMsgBox);
+
+}
+
+
+
+/**
+ * count_pieces:
+ * @app:
+ *
+ * function description:
+ *
+ * return values: number of pieces which at the moment on the board
+ */
+gint 
+count_pieces(GoalApp *app)
+{
+	gint x, y, z;
+
+	
+	z = 0;
+	
+	for(x = 0; x < NUMBER_CELLS; x++)
+	{
+		for(y = 0; y < NUMBER_CELLS; y++)
+		{
+			if(app->game.CellStatus[x][y] == OCCUPIED) z++;
+		}
+	}
+
+	return z;
+
+}
 

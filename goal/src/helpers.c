@@ -428,7 +428,7 @@ goal_init_and_create(gint argc, gchar **argv)
 	if((ret = create_theme_list(app)) != 0)
 		g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading theme (ERROR:%i)\n" , PACKAGE, __FILE__, __LINE__, ret);
 	
-	/* check the default theme number, if is lesser than 0 or greater than our number of themes then set it to 1 */
+	/* check the default theme number, if is lesser than 1 or greater than our number of themes then set it to 1 */
 	if((app->game.DefaultThemeNumber > app->NumberOfThemes) || (app->game.DefaultThemeNumber < 1))
 	{
 		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: wrong theme number, set theme number to 1\n" , PACKAGE, __FILE__, __LINE__);
@@ -438,10 +438,20 @@ goal_init_and_create(gint argc, gchar **argv)
 	if((ret = load_pixmaps(app)) != 0)
 		g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading pixmaps (ERROR:%i)\n" , PACKAGE, __FILE__, __LINE__, ret);
 	delete_theme_list(app);
+
+
+	/* appbar hint */
+	gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar), _("Welcome to Goal"));
+	
+	/* update the gui but don't start a new one */
+	init_new_game(app);
+		
 	
 	/* init the game status to not running */
 	app->game.GameIsRunning = FALSE;
-	
+	app->game.JumpStarted = FALSE;
+	app->game.FirstPieceRemoved = FALSE;
+
 	return app;
 	
 }
@@ -462,7 +472,6 @@ load_settings(GoalApp *app)
 	
 
 	/* default theme name */
-	/*app->game.ThemeName = gnome_config_get_string("/goal/defaultthemename=default");*/
 	tmp1 = g_malloc(sizeof(gint) + sizeof("/goal/setting/defaultthemenumber="));
 	sprintf(tmp1, "/goal/setting/defaultthemenumber=%i", 1);
 	app->game.DefaultThemeNumber = gnome_config_get_int(tmp1);
@@ -476,7 +485,7 @@ load_settings(GoalApp *app)
 	
 	/* board hints */
 	tmp1 = g_malloc(sizeof(gint) + sizeof("/goal/setting/showboardhints="));
-	sprintf(tmp1,"/goal/setting/showboardhints=%i", TRUE);
+	sprintf(tmp1,"/goal/setting/showboardhints=%i", FALSE);
 	app->game.ShowBoardHints = gnome_config_get_bool(tmp1);
 	g_free(tmp1);
 	

@@ -63,6 +63,7 @@ typedef struct
 			*NewGameDlg,
 			*Canvas,
 			*ExitMsgBox,
+			*GameFinishedMsgBox,
 			*PropertyBox,
 			*PropertyBoxButtonLeft,
 			*PropertyBoxButtonRight,

@@ -411,6 +411,11 @@ new_game_cb(GtkWidget *widget, gpointer data)
 	else
 		app->game.FirstPieceRemoved = TRUE;
 
+
+	/* set text to appbar */
+	gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar), _("New game started."));
+
+	
 	g_print("new game startet\n");
 }
 
