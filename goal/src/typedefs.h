@@ -3,6 +3,8 @@
 
 
 #include <gnome.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 
 #define NUMBER_CELLS 7
 
@@ -31,6 +33,9 @@ enum GameTypes
 /* this struct holds the app */
 typedef struct
 {
+
+
+	
 	/* the gui objects */
 	struct
 	{
@@ -54,6 +59,22 @@ typedef struct
 		}board[NUMBER_CELLS][NUMBER_CELLS];
 	} gui;
 
+
+	
+	/* helper variables */
+	struct
+	{
+		GdkPixbuf *Wallpaper,
+			*PieceNormal,
+			*PieceMarked,
+			*PieceTouched,
+			*PieceNegativ,
+			*PieceEmptyPositiv,
+			*PieceEmptyNegativ;
+		
+	} tmp;
+	
+	
 	
 	/* the game management */
 	struct
@@ -84,7 +105,10 @@ typedef struct
 	} settings;
 
 	
+	
 } GoalApp;
 
 
 #endif /* __GOAL_TYPEDEFS_H__ */
+
+
