@@ -19,6 +19,7 @@ make_menus(GoalApp *app)
 
 	GnomeUIInfo menubar_game_menu[] = 
 	{
+		GNOMEUIINFO_MENU_NEW_GAME_ITEM(new_game_cb, app), 
 		GNOMEUIINFO_SEPARATOR,
 		GNOMEUIINFO_MENU_EXIT_ITEM(menubar_game_menu_exit_item_cb, app),
 		GNOMEUIINFO_END
@@ -58,27 +59,58 @@ load_settings(GoalApp *app)
 	gchar *tmp1,
 		*tmp2,
 		*filename;
-	
-	/* piece pixmap */	
+		
+		
+	/* piece pixmap (normal) */	
 	tmp1 = g_strconcat("goal/", "piece.png", NULL);
 	filename = gnome_unconditional_pixmap_file(tmp1);
 	tmp2 = g_strconcat("/goal/pieceicon/filename=", filename, NULL);
-	app->settings.PathToPixmapPiece = gnome_config_get_string(tmp2); 
-	g_free(tmp1);
-	g_free(tmp2);
-	g_free(filename);
-	/* wallpaper pixmap */	
-	tmp1 = g_strconcat("goal/", "wallpaper.png", NULL);
-	filename = gnome_unconditional_pixmap_file(tmp1);
-	tmp2 = g_strconcat("/goal/wallpaper/filename=", filename, NULL);
-	app->settings.PathToPixmapWallpaper = gnome_config_get_string(tmp2); 
+	app->settings.PathToPixmapPieceNormal = "/home/sebastian/projects/goal/pixmaps/piece_normal.png";/*gnome_config_get_string(tmp2); */
 	g_free(tmp1);
 	g_free(tmp2);
 	g_free(filename);
 
+	/* piece pixmap (marked) */
+	app->settings.PathToPixmapPieceMarked = "/home/sebastian/projects/goal/pixmaps/piece_marked.png";
+
+	/* piece pixmap (touched) */	
+	app->settings.PathToPixmapPieceTouched = "/home/sebastian/projects/goal/pixmaps/piece_touched.png";
+
+
+	/* piece pixmap (negativ) */	
+	app->settings.PathToPixmapPieceNegativ = "/home/sebastian/projects/goal/pixmaps/piece_negativi.png";
 	
-	g_print("load: %s\n", app->settings.PathToPixmapPiece);
-	g_print("load: %s\n", app->settings.PathToPixmapWallpaper);
+	/* piece pixmap (empty positiv) */	
+	app->settings.PathToPixmapPieceEmptyPositiv = "/home/sebastian/projects/goal/pixmaps/piece_empty_positiv.png";
+
+	/* piece pixmap (emptiy negativ) */	
+	app->settings.PathToPixmapPieceEmptyNegativ = "/home/sebastian/projects/goal/pixmaps/piece_empty_negativ.png";
+
+	
+	/* wallpaper pixmap */	
+	tmp1 = g_strconcat("goal/", "wallpaper.png", NULL);
+	filename = gnome_unconditional_pixmap_file(tmp1);
+	tmp2 = g_strconcat("/goal/wallpaper/filename=", filename, NULL);
+	app->settings.PathToPixmapWallpaper = "/home/sebastian/projects/goal/pixmaps/wallpaper.png";/*gnome_config_get_string(tmp2);*/ 
+	g_free(tmp1);
+	g_free(tmp2);
+	g_free(filename);
+	
+	/* gametype */
+	tmp1 = g_malloc(sizeof(gint) + sizeof("/goal/gametype="));
+	sprintf(tmp1,"/goal/gametype=%i", SOLITAIRE);
+	app->game.GameType = gnome_config_get_int(tmp1);
+	g_free(tmp1);
+	
+	g_print("Goal :: load_seetings\n");
+	g_print("PathToPixmapWallpaper: %s\n", app->settings.PathToPixmapWallpaper);
+	g_print("PathToPixmapPieceNormal: %s\n", app->settings.PathToPixmapPieceNormal);
+	g_print("PathToPixmapPieceMarked: %s\n", app->settings.PathToPixmapPieceMarked);
+	g_print("PathToPixmapPieceTouched: %s\n", app->settings.PathToPixmapPieceTouched);
+	g_print("PathToPixmapPieceNegativ: %s\n", app->settings.PathToPixmapPieceNegativ);
+	g_print("PathToPixmapPieceEmptyPositiv: %s\n", app->settings.PathToPixmapPieceEmptyPositiv);
+	g_print("PathToPixmapPieceEmptyNegativ: %s\n", app->settings.PathToPixmapPieceEmptyNegativ);
+	g_print("GameType: %i\n", app->game.GameType);
 	
 }
 
@@ -118,6 +150,10 @@ GoalApp *app;
 			"delete_event",
 			GTK_SIGNAL_FUNC(mainwindow_delete_event_cb),
 			app);
+	gtk_signal_connect(GTK_OBJECT(app->gui.MainWindow),
+			"destroy",
+			GTK_SIGNAL_FUNC(mainwindow_destroy_cb),
+			app);
 
 	/* install the appbar */
 	if((app->gui.Appbar = gnome_appbar_new(FALSE, TRUE, GNOME_PREFERENCES_USER)) == NULL)
@@ -139,6 +175,10 @@ GoalApp *app;
 
 	/* create the main menu */
 	make_menus(app);
+
+
+	/* init the game status to not running */
+	app->game.GameIsRunning = FALSE;
 	
 	return app;
 	
