@@ -1,0 +1,6 @@
+#undef PACKAGE
+#undef VERSION
+#undef ENABLE_NLS
+#undef HAVE_CATGETS
+#undef HAVE_GETTEXT
+#undef HAVE_LC_MESSAGES

@@ -1,0 +1,32 @@
+dnl Goal - 2001 Dietze Sebastian
+
+AC_INIT(src/main.c)
+
+AM_CONFIG_HEADER(config.h)
+
+AM_INIT_AUTOMAKE(Goal, 0.0)
+
+AM_MAINTAINER_MODE
+
+AM_ACLOCAL_INCLUDE(macros)
+
+GNOME_INIT
+
+AC_PROG_CC
+AC_ISC_POSIX
+AC_HEADER_STDC
+
+
+GNOME_COMPILE_WARNINGS
+
+dnl i18n, l10n stuff
+ALL_LINGUAS=""
+AM_GNU_GETTEXT
+
+AC_OUTPUT([
+Makefile
+macros/Makefile
+intl/Makefile
+pixmaps/Makefile
+src/Makefile
+])
