@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <gconf/gconf-client.h>
 
 
 /**
@@ -105,6 +106,8 @@ load_pixmaps(GoalApp *app)
 		y;
 	GdkPixbuf *buff;
 	GoalTheme *theme;
+	GError *err = NULL;
+
 
 	/* get the given theme (the list ist counting from 0, but we count from 1 thats why -1)*/
 	theme = (GoalTheme *) g_list_nth_data(app->ThemeList, app->game.DefaultThemeNumber - 1);
@@ -118,8 +121,12 @@ load_pixmaps(GoalApp *app)
 	
 	/* ---===---===---   load pixmaps into canvas   ---===---===--- */
 	/* --- Wallpaper --- */	
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapWallpaper, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapWallpaper, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+		
 		return 1;
 	};
 	/* get height and width, with this info we set the main windows heigth and width */
@@ -144,8 +151,12 @@ load_pixmaps(GoalApp *app)
 	gdk_pixbuf_unref(buff);	 
 	
 	/* --- Piece --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNormal, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNormal, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 2;
 	}
 	app->gui.PieceHeight = gdk_pixbuf_get_height(buff);
@@ -178,8 +189,12 @@ load_pixmaps(GoalApp *app)
 	
 
 	/* --- Piece (empty) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -206,8 +221,12 @@ load_pixmaps(GoalApp *app)
 
 
 	/* --- Piece (marked) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceMarked, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceMarked, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -233,8 +252,12 @@ load_pixmaps(GoalApp *app)
 	gdk_pixbuf_unref(buff);
 
 	/* --- Piece (touched) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceTouched, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceTouched, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 4;
 	}
 
@@ -260,8 +283,12 @@ load_pixmaps(GoalApp *app)
 	gdk_pixbuf_unref(buff);
 
 	/* --- Piece (negativ) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNegativ, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNegativ, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 5;
 	}
 	
@@ -289,8 +316,12 @@ load_pixmaps(GoalApp *app)
 
 	
 	/* --- Piece (positiv) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyPositiv, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyPositiv, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 6;
 	}
 
@@ -318,8 +349,12 @@ load_pixmaps(GoalApp *app)
 
 	
 	/* --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyNegativ, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyNegativ, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 7;
 	}
 
@@ -403,6 +438,10 @@ goal_init_and_create(gint argc, gchar **argv)
        if((app->Goal = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv, GNOME_PARAM_NONE)) == NULL)
 	       g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: could not init gnome\n" , PACKAGE, __FILE__, __LINE__);
 
+	/* init gconf */
+       
+
+       
 	/* load the settings */
 	load_settings(app);
 	
@@ -497,33 +536,44 @@ goal_init_and_create(gint argc, gchar **argv)
 void
 load_settings(GoalApp *app)
 {
-	gchar *tmp1;
-	
+	/*gchar *tmp1;*/
+	GConfClient *client;
+	GError *err = NULL;
+        
 
-	/* default theme name */
-	tmp1 = g_malloc(sizeof(gint) + sizeof("/goal/setting/defaultthemenumber="));
-	sprintf(tmp1, "/goal/setting/defaultthemenumber=%i", 1);
-	app->game.DefaultThemeNumber = gnome_config_get_int(tmp1);
-	g_free(tmp1);
+        client = gconf_client_get_default();
+
 	
-	/* gametype */
-	tmp1 = g_malloc(sizeof(gint) + sizeof("/goal/setting/gametype="));
-	sprintf(tmp1,"/goal/setting/gametype=%i", SOLITAIRE);
-	app->game.GameType = gnome_config_get_int(tmp1);
-	g_free(tmp1);			
+	/* get the saved theme number from gconf */
+	app->game.DefaultThemeNumber = gconf_client_get_int(client, "/apps/goal/defaultthemenumber", &err);
+	if(err)
+	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: gconf error(%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+        }
+
+	/* get the saved game type from gconf */
+	app->game.GameType = gconf_client_get_int(client, "/apps/goal/gametype", &err);
+	if(err)
+	{
+        	g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: gconf error(%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+	}
+
+	/* show board hints or not?? - stored in gconf */
+	app->game.ShowBoardHints = gconf_client_get_bool(client, "/apps/goal/showboardhints", &err);
+	if(err)
+	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: gconf error(%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+        }
+
 	
-	/* board hints */
-	tmp1 = g_malloc(sizeof(gint) + sizeof("/goal/setting/showboardhints="));
-	sprintf(tmp1,"/goal/setting/showboardhints=%i", FALSE);
-	app->game.ShowBoardHints = gnome_config_get_bool(tmp1);
-	g_free(tmp1);
-	
-	/*
-	g_print("Goal :: load_seetings\n");
-	g_print("DefaultTheme: %i\n", app->game.DefaultThemeNumber);
-	g_print("GameType: %i\n", app->game.GameType);
-	g_print("ShowBoardHints: %i\n", app->game.ShowBoardHints);
-	*/	
+	g_object_unref(client);
+
 }
 
 
@@ -539,22 +589,42 @@ load_settings(GoalApp *app)
 void
 save_settings(GoalApp *app)
 {
-	
-	gnome_config_set_int("/goal/setting/defaultthemenumber", app->game.DefaultThemeNumber);
+	GConfClient *client;
+	GError *err = NULL;
 
-	gnome_config_set_int("/goal/setting/gametype", app->game.GameType);
+	
+	client = gconf_client_get_default ();
+	
+	/* store the selected theme number */
+	gconf_client_set_int(client, "/apps/goal/defaultthemenumber", app->game.DefaultThemeNumber, &err);
+	if(err)
+	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: gconf error(%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+	}
 
-	gnome_config_set_int("/goal/setting/showboardhints", app->game.ShowBoardHints);
-	
-	/* write to disk */
-	gnome_config_sync();
-	
-	/*	
-	g_print("Goal :: save_seetings\n");
-	g_print("DefaultTheme: %i\n", app->game.DefaultThemeNumber);
-	g_print("GameType: %i\n", app->game.GameType);
-	g_print("ShowBoardHints: %i\n", app->game.ShowBoardHints);	
-	*/
+	/* store the selected game type */
+	gconf_client_set_int(client, "/apps/goal/gametype", app->game.GameType, &err);
+	if(err)
+	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: gconf error(%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+	}
+
+	/* store if hints would be showed or not */
+	gconf_client_set_bool(client, "/apps/goal/showboardhints", app->game.ShowBoardHints, &err);
+	if(err)
+	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: gconf error(%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+	}
+
+	/* destroy the client */
+	g_object_unref(client);
+
 }
 
 
@@ -782,6 +852,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gfloat height_scale = 2.0,
 		width_scale = 2.0;
 	gchar *theme_name;
+	GError *err = NULL;
+
 	
 	
 	/* */
@@ -804,8 +876,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 	/* ---===---===---   load pixmaps into canvas   ---===---===--- */
 	/* --- Wallpaper --- */	
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapWallpaper, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapWallpaper, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 1;
 	};
 	
@@ -838,8 +914,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);	 
 	
 	/* --- Piece (normal) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNormal, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNormal, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -862,8 +942,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 
 	/* --- Piece (empty) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -887,8 +971,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 	
 	/* --- Piece (marked) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceMarked, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceMarked, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -910,8 +998,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);
 
 	/* --- Piece (touched) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceTouched, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceTouched, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -933,8 +1025,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);
 
 	/* --- Piece (negativ) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNegativ, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNegativ, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -957,8 +1053,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 
 	/* --- Piece (empty positiv) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyPositiv, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyPositiv, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	
@@ -980,8 +1080,12 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);
 
 	/* --- Piece (empty negativ) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyNegativ, NULL)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyNegativ, &err)) == NULL)
 	{
+		g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading image (%s)\n" , PACKAGE, __FILE__, __LINE__, err->message);
+                g_error_free(err);
+                err = NULL;
+
 		return 3;
 	}
 	

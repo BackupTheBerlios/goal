@@ -1,6 +1,6 @@
 dnl Goal - 2001 Dietze Sebastian
 
-AC_INIT(goal,0.3,https://developer.berlios.de/bugs/?group_id=218)
+AC_INIT(goal,0.4,https://developer.berlios.de/bugs/?group_id=218)
 AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME,AC_PACKAGE_VERSION)
@@ -11,8 +11,11 @@ AC_ISC_POSIX
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 
+dnl gconf
+AM_GCONF_SOURCE_2
+AC_PATH_PROG(GCONFTOOL, gconftool-2)
 
-pkg_modules="libgnomeui-2.0 libgnomecanvas-2.0 glib-2.0 gdk-pixbuf-xlib-2.0 gnome-desktop-2.0 libart-2.0 libgnome-2.0 gdk-x11-2.0"
+pkg_modules="libgnomeui-2.0 libgnomecanvas-2.0 glib-2.0 gdk-pixbuf-xlib-2.0 gnome-desktop-2.0 libart-2.0 libgnome-2.0 gdk-x11-2.0 gconf-2.0"
 PKG_CHECK_MODULES(EXTRA_GNOME, [$pkg_modules])
 AC_SUBST(EXTRA_GNOME_CFLAGS)
 AC_SUBST(EXTRA_GNOME_LIBS)

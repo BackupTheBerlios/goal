@@ -5,7 +5,6 @@
 #include <gnome.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-
 #define NUMBER_CELLS 7
 
 

@@ -137,12 +137,12 @@ menubar_help_menu_about_item_cb(GtkWidget *widget, gpointer data)
 	/* else creat a new one */
 	app->gui.AboutDlg = gnome_about_new("Goal",
 			VERSION,
-			"(c) 2001,2002 Dietze Sebastian",
+			"(C) 2001-2003 Dietze Sebastian",
 			_("A Solitaire game for Gnome."),
 			(const char **) authors,
-			(const char **)documenters,
+			(const char **) documenters,
 			strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-			NULL/* we need a very nice logo */);
+			NULL/* need a very nice logo */);
 
 	g_signal_connect(GTK_OBJECT(app->gui.AboutDlg), "destroy", GTK_SIGNAL_FUNC
 		                        (gtk_widget_destroyed), &app->gui.AboutDlg);

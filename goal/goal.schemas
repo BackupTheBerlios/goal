@@ -1,0 +1,40 @@
+<gconfschemafile>
+  <schemalist>
+    <schema>
+      <key>/schemas/apps/goal/defaultthemenumber</key>
+      <applyto>/apps/goal/defaultthemenumber</applyto>
+      <owner>goal</owner>
+      <type>int</type>
+      <default>1</default>
+      <locale name="C">
+        <short>the default theme</short>
+        <long>This variable stores the theme number which will be loaded at the beginning.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/goal/gametype</key>
+      <applyto>/apps/goal/gametype</applyto>
+      <owner>goal</owner>
+      <type>int</type>
+      <default>8</default>
+      <locale name="C">
+        <short>the default gametype</short>
+        <long>This variable stores the gametype which will be loaded at the beginning. Possible range from 0 to 8.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/goal/showboardhints</key>
+      <applyto>/apps/goal/showboardhints</applyto>
+      <owner>goal</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>game hints</short>
+        <long>This variable describes if game hints would be notifed or not. Possible values are true or false.</long>
+      </locale>
+    </schema>
+  </schemalist>  
+</gconfschemafile>
+          
