@@ -30,6 +30,23 @@ enum GameTypes
 	SOLITAIRE
 };
 
+
+/* */
+typedef struct
+{
+	gchar *ThemeName,
+		*PathToPixmapWallpaper,
+		*PathToPixmapPieceNormal,
+		*PathToPixmapPieceMarked,
+		*PathToPixmapPieceTouched,
+		*PathToPixmapPieceNegativ,
+		*PathToPixmapPieceEmptyPositiv,
+		*PathToPixmapPieceEmptyNegativ;
+
+}GoalTheme;
+
+
+
 /* this struct holds the app */
 typedef struct
 {
@@ -44,7 +61,11 @@ typedef struct
 			*AboutDlg,
 			*NewGameDlg,
 			*Canvas,
-			*ExitMsgBox;
+			*ExitMsgBox,
+			*PropertyBox,
+			*PropertyBoxButtonLeft,
+			*PropertyBoxButtonRight,
+			*PropertyBoxCanvas;
 
 		GnomeCanvasItem *Wallpaper,
 			*PieceNormal[NUMBER_CELLS][NUMBER_CELLS], /* the "normal" piece */
@@ -65,11 +86,15 @@ typedef struct
 	/* the game management */
 	struct
 	{
+		gchar *ThemeName;
 		gboolean GameIsRunning,
 			FirstPieceRemoved,
-			JumpStarted;
-		gint GameType,
-			JumpStartPosX,
+			JumpStarted,
+			ShowBoardHints;
+		gint GameType;
+		gint MovePosX,
+			MovePosY;
+		gint JumpStartPosX,
 			JumpStartPosY;
 		gint CellStatus[NUMBER_CELLS][NUMBER_CELLS];
 
@@ -77,18 +102,9 @@ typedef struct
 
 
 	
-	/* setting variables */
-	struct
-	{
-		gchar *PathToPixmapWallpaper,
-			*PathToPixmapPieceNormal,
-			*PathToPixmapPieceMarked,
-			*PathToPixmapPieceTouched,
-			*PathToPixmapPieceNegativ,
-			*PathToPixmapPieceEmptyPositiv,
-			*PathToPixmapPieceEmptyNegativ;
-	} settings;
-
+	/*  */
+	GList *ThemeList;
+	guint NumberOfThemes;
 	
 	
 } GoalApp;

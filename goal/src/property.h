@@ -6,7 +6,7 @@
 #include "typedefs.h"
 
 
-void load_settings(GoalApp *app);
+void create_PropertyBox(GoalApp *app);
 
 
 #endif /* __GOAL_ROPERTY_H__ */

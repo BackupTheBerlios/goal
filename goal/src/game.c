@@ -252,6 +252,13 @@ void init_new_game(GoalApp *app)
 	gnome_canvas_item_hide(app->gui.PieceNegativ);
 	gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
 	gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
+
+	/* set important variables */
+	app->game.JumpStartPosX = 0;
+	app->game.JumpStartPosY = 0;
+	app->game.MovePosX = 0;
+	app->game.MovePosY = 0;
+
 }
 
 
@@ -394,13 +401,15 @@ make_move(GoalApp *app, gint from_x, gint from_y, gint to_x, gint to_y){
     app->game.CellStatus[to_x][to_y] = OCCUPIED;
     gnome_canvas_item_show(app->gui.PieceNormal[to_x][to_y]);
     
-    if(from_x == to_x){
+    if(from_x == to_x)
+    {/* horizontal jump */
 	diff = from_y - to_y;
 	if(diff == -2) diff = from_y + 1;
-	else diff= from_y - 1;
+	else diff = from_y - 1;
 	remove_piece(app, from_x, diff);
     }
-    else{
+    else
+    {/* vertical jump */
 	diff = from_x - to_x;
 	if(diff == -2) diff = from_x + 1;
 	else diff= from_x - 1;
@@ -437,12 +446,14 @@ play(GoalApp *app, gint x, gint y)
 			else
 			{/* failure */
 
+				gnome_canvas_item_show(app->gui.PieceNormal[app->game.JumpStartPosX][app->game.JumpStartPosY]);
 			}
 			
 			app->game.JumpStarted = FALSE;
 			app->game.JumpStartPosX = 0;
-			app->game.JumpStartPosY = 0;	
-		}
+			app->game.JumpStartPosY = 0;
+			gnome_canvas_item_hide(app->gui.PieceMarked);
+					}
 		else
 		{/* begin a new jump */
 			if(app->game.CellStatus[x][y] == OCCUPIED)
@@ -450,18 +461,34 @@ play(GoalApp *app, gint x, gint y)
 				app->game.JumpStarted = TRUE;
 				app->game.JumpStartPosX = x;
 				app->game.JumpStartPosY = y;			
+				gnome_canvas_item_set(app->gui.PieceMarked, 
+						"x", (double)(x * app->gui.PieceWidth),
+						"y", (double)(y * app->gui.PieceHeight),
+						NULL);
+				gnome_canvas_item_hide(app->gui.PieceNormal[x][y]);
+				gnome_canvas_item_show(app->gui.PieceMarked);
+				gnome_canvas_item_hide(app->gui.PieceTouched);
+
 			}
+		}
+
+		if(app->game.ShowBoardHints)
+		{	
+			gnome_canvas_item_hide(app->gui.PieceNegativ);
+			gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
+			gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
 		}
 	}
 	else
 	{/* --------------------------------->>>>>>>>>>>>>>>>> only used for "solitaire" game type */
 		remove_piece(app, x, y);
 		app->game.FirstPieceRemoved = TRUE;
+		gnome_canvas_item_hide(app->gui.PieceTouched);
 	}
 
 
 	if(!one_move_possible(app))
-	{/* no jump possible, finish this play */
+	{/* no jump possible, finish this game */
 		g_print("game finished\n");
 		app->game.GameIsRunning = FALSE;
 		app->game.JumpStarted = FALSE;
@@ -469,6 +496,123 @@ play(GoalApp *app, gint x, gint y)
 	}
 }
 
+
+
+/**
+ * show_board_hints:
+ * @app:
+ * @x:
+ * @y:
+ *
+ * function description:
+ *
+ * return values:
+ */
+void 
+show_board_hints(GoalApp *app, gint x, gint y)
+{
+	if((app->game.MovePosX == x) && (app->game.MovePosY == y)) return;
+
+	
+	if(app->game.FirstPieceRemoved)
+	{
+		if(app->game.JumpStarted)
+		{
+			if(app->game.ShowBoardHints)
+			{
+				gnome_canvas_item_hide(app->gui.PieceNegativ);
+				gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
+				gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
+			}
+		
+			if((app->game.JumpStartPosX != x) || (app->game.JumpStartPosY != y))
+			{/* else do nothing */g_print("##\n");
+				if(app->game.CellStatus[x][y] == OCCUPIED)
+				{
+					if(app->game.ShowBoardHints)
+		  			{
+						gnome_canvas_item_set(app->gui.PieceNegativ,
+								"x", (double)(x * app->gui.PieceWidth),
+						      		"y", (double)(y * app->gui.PieceHeight),
+					      			NULL);
+						gnome_canvas_item_show(app->gui.PieceNegativ);
+					}
+					else
+					{
+						gnome_canvas_item_set(app->gui.PieceTouched, 
+							"x", (double)(x * app->gui.PieceWidth),
+							"y", (double)(y * app->gui.PieceHeight),
+							NULL);
+						gnome_canvas_item_show(app->gui.PieceTouched);
+
+					}
+				}
+				else
+				{/* or app->game.CellStatus[x][y] == EMPTY state */
+					if(valid_move(app, app->game.JumpStartPosX, app->game.JumpStartPosY, x, y))
+			  		{
+			  			if(app->game.ShowBoardHints)
+		      				{
+				  			gnome_canvas_item_set(app->gui.PieceEmptyPositiv, 
+						  		"x", (double)(x * app->gui.PieceWidth),
+								"y", (double)(y * app->gui.PieceHeight),
+						  		NULL);
+			    				gnome_canvas_item_show(app->gui.PieceEmptyPositiv);
+						}
+						else
+						{
+							gnome_canvas_item_hide(app->gui.PieceTouched);
+						}
+					}
+					else
+					{
+						if(app->game.ShowBoardHints)
+		      				{
+			    				gnome_canvas_item_set(app->gui.PieceEmptyNegativ, 
+						  		"x", (double)(x * app->gui.PieceWidth),
+							  	"y", (double)(y * app->gui.PieceHeight),
+						  		NULL);
+					    		gnome_canvas_item_show(app->gui.PieceEmptyNegativ);
+						}
+						else
+						{
+							gnome_canvas_item_hide(app->gui.PieceTouched);
+						}
+
+					}
+				}
+			}
+		}
+		else
+	      	{/* app->game.JumpStarted */
+			if(app->game.CellStatus[x][y] == OCCUPIED)
+		  	{
+		    		gnome_canvas_item_set(app->gui.PieceTouched, 
+					"x", (double)(x * app->gui.PieceWidth),
+					"y", (double)(y * app->gui.PieceHeight),
+					NULL);
+				gnome_canvas_item_show(app->gui.PieceTouched);
+			}
+			else
+		  	{
+		    		gnome_canvas_item_hide(app->gui.PieceTouched);
+		  	}
+		}
+	}
+	else
+	{/* app->game.FirstPieceRemoved */
+		gnome_canvas_item_set(app->gui.PieceTouched, 
+			"x", (double)(x * app->gui.PieceWidth),
+			"y", (double)(y * app->gui.PieceHeight),
+			NULL);
+		gnome_canvas_item_show(app->gui.PieceTouched);
+	}
+	
+	
+	/* store x and y */
+	app->game.MovePosX = x;
+	app->game.MovePosY = y;
+}
 
 
 

@@ -21,6 +21,11 @@ void set_game_type_to_rubin_cb(GtkWidget *widget, gpointer data);
 void set_game_type_to_diamond_cb(GtkWidget *widget, gpointer data);
 void set_game_type_to_solitaire_cb(GtkWidget *widget, gpointer data);
 gint ask_finish_game(GoalApp *app);
+void toggle_show_board_hints_cb(GtkWidget *widget, gpointer data);
+void menubar_help_menu_properties_item_cb(GtkWidget *widget, gpointer data);
+void property_left_arrow_button_press_event_cb(GtkWidget *widget, gpointer data);
+void property_right_arrow_button_press_event_cb(GtkWidget *widget, gpointer data);
+
 
 
 #endif /* __GOAL_CALLBACKS_H__ */
