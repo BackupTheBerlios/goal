@@ -525,7 +525,6 @@ play(GoalApp *app, gint x, gint y)
 					"y", (double)(y * app->gui.PieceHeight),
 					NULL);
 		gnome_canvas_item_show(app->gui.PieceEmpty);
-
 	}
 
 	/* ------------------------------------------->>>>>>>>>>>>>>>>>>>>>> terminate the game <<<<<<<<<<<<<<<<<<<<<<<< ---------*/
@@ -575,7 +574,8 @@ show_board_hints(GoalApp *app, gint x, gint y)
 			}
 		
 			if((app->game.JumpStartPosX != x) || (app->game.JumpStartPosY != y))
-			{/* else do nothing */g_print("##\n");
+			{/* else do nothing */
+				/*g_print("##\n");*/
 				if(app->game.CellStatus[x][y] == OCCUPIED)
 				{
 					if(app->game.ShowBoardHints)
@@ -585,6 +585,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 						      		"y", (double)(y * app->gui.PieceHeight),
 					      			NULL);
 						gnome_canvas_item_show(app->gui.PieceNegativ);
+						gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar),_("You can not jump on this field"));
 					}
 					else
 					{
@@ -608,6 +609,8 @@ show_board_hints(GoalApp *app, gint x, gint y)
 								"y", (double)(y * app->gui.PieceHeight),
 						  		NULL);
 			    				gnome_canvas_item_show(app->gui.PieceEmptyPositiv);
+							gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar),_("Click on this this field to jump"));
+
 						}
 						else
 						{
@@ -629,6 +632,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 							  	"y", (double)(y * app->gui.PieceHeight),
 						  		NULL);
 					    		gnome_canvas_item_show(app->gui.PieceEmptyNegativ);
+							gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar),_("You can not jump on this field"));
 						}
 						else
 						{
@@ -655,6 +659,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 					NULL);
 				gnome_canvas_item_show(app->gui.PieceTouched);
 				gnome_canvas_item_hide(app->gui.PieceEmpty);
+				gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar),_("Click on this gaming piece to mark it"));
 			}
 			else
 		  	{
@@ -664,6 +669,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 					NULL);
 				gnome_canvas_item_show(app->gui.PieceEmpty);
 		    		gnome_canvas_item_hide(app->gui.PieceTouched);
+				gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar),_("Empty field"));
 		  	}
 		}
 	}
@@ -674,6 +680,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 			"y", (double)(y * app->gui.PieceHeight),
 			NULL);
 		gnome_canvas_item_show(app->gui.PieceTouched);
+		gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar),_("Click on a gaming piece to remove it"));
 	}
 	
 	

@@ -617,9 +617,7 @@ create_theme_list(GoalApp *app)
 	GoalTheme *theme;
 		
 
-	/*g_print("create_theme_list: ");*/
 	theme_path = gnome_unconditional_datadir_file("goal");
-	/*g_print("%s\n", theme_path);*/
 	
 	
 	if((dirp = opendir(theme_path)) == NULL)
