@@ -1,6 +1,6 @@
 #include <config.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gdk-pixbuf/gnome-canvas-pixbuf.h>
+#include <libgnomecanvas/gnome-canvas-pixbuf.h>
 #include "typedefs.h"
 #include "helpers.h"
 #include "callbacks.h"
@@ -118,7 +118,7 @@ load_pixmaps(GoalApp *app)
 	
 	/* ---===---===---   load pixmaps into canvas   ---===---===--- */
 	/* --- Wallpaper --- */	
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapWallpaper)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapWallpaper, NULL)) == NULL)
 	{
 		return 1;
 	};
@@ -135,13 +135,16 @@ load_pixmaps(GoalApp *app)
 			"y",0.0,
 			NULL);
 	/* connect to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.Wallpaper), "event",
-			(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.Wallpaper), "event",
+			(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.Wallpaper, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 	
 	gdk_pixbuf_unref(buff);	 
 	
 	/* --- Piece --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNormal)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNormal, NULL)) == NULL)
 	{
 		return 2;
 	}
@@ -163,8 +166,11 @@ load_pixmaps(GoalApp *app)
 					"y",(double)(y * app->gui.PieceHeight),
 					NULL);
 				/* connect canvas item to signal */
-				gtk_signal_connect(GTK_OBJECT(app->gui.PieceNormal[x][y]), "event",
-					(GtkSignalFunc)board_event_cb, app);
+				/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceNormal[x][y]), "event",
+					(GtkSignalFunc)board_event_cb, app);*/
+				g_signal_connect((gpointer)app->gui.PieceNormal[x][y], "event", 
+					G_CALLBACK(board_event_cb), app);
+
 			}
 	PNoH = app->gui.PieceHeight;
 	PNoW = app->gui.PieceWidth;
@@ -172,7 +178,7 @@ load_pixmaps(GoalApp *app)
 	
 
 	/* --- Piece (empty) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -186,8 +192,11 @@ load_pixmaps(GoalApp *app)
 					"y", 0.0,
 					NULL);
 	/* connect canvas item to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.PieceEmpty), "event",
-		(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceEmpty), "event",
+		(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.PieceEmpty, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 
 	gnome_canvas_item_hide(app->gui.PieceEmpty);
 	
@@ -197,7 +206,7 @@ load_pixmaps(GoalApp *app)
 
 
 	/* --- Piece (marked) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceMarked)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceMarked, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -211,8 +220,11 @@ load_pixmaps(GoalApp *app)
 					"y", 0.0,
 					NULL);
 	/* connect canvas item to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.PieceMarked), "event",
-		(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceMarked), "event",
+		(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.PieceMarked, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 
 	gnome_canvas_item_hide(app->gui.PieceMarked);
 	
@@ -221,7 +233,7 @@ load_pixmaps(GoalApp *app)
 	gdk_pixbuf_unref(buff);
 
 	/* --- Piece (touched) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceTouched)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceTouched, NULL)) == NULL)
 	{
 		return 4;
 	}
@@ -235,8 +247,11 @@ load_pixmaps(GoalApp *app)
 			"y", 0.0,
 			NULL);
 	/* connect canvas item to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.PieceTouched), "event",
-		(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceTouched), "event",
+		(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.PieceTouched, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 
 	gnome_canvas_item_hide(app->gui.PieceTouched);
 			
@@ -245,7 +260,7 @@ load_pixmaps(GoalApp *app)
 	gdk_pixbuf_unref(buff);
 
 	/* --- Piece (negativ) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNegativ)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceNegativ, NULL)) == NULL)
 	{
 		return 5;
 	}
@@ -259,8 +274,11 @@ load_pixmaps(GoalApp *app)
 			"y", 0.0,
 			NULL);
 	/* connect canvas item to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.PieceNegativ), "event",
-		(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceNegativ), "event",
+		(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.PieceNegativ, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 
 
 	gnome_canvas_item_hide(app->gui.PieceNegativ);
@@ -271,7 +289,7 @@ load_pixmaps(GoalApp *app)
 
 	
 	/* --- Piece (positiv) --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyPositiv)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyPositiv, NULL)) == NULL)
 	{
 		return 6;
 	}
@@ -285,8 +303,11 @@ load_pixmaps(GoalApp *app)
 			"y", 0.0,
 			NULL);
 	/* connect canvas item to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.PieceEmptyPositiv), "event",
-		(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceEmptyPositiv), "event",
+		(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.PieceEmptyPositiv, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 
 
 	gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
@@ -297,7 +318,7 @@ load_pixmaps(GoalApp *app)
 
 	
 	/* --- */
-	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyNegativ)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(/*app->*/theme->PathToPixmapPieceEmptyNegativ, NULL)) == NULL)
 	{
 		return 7;
 	}
@@ -311,8 +332,11 @@ load_pixmaps(GoalApp *app)
 			"y", 0.0,
 			NULL);
 	/* connect canvas item to signal */
-	gtk_signal_connect(GTK_OBJECT(app->gui.PieceEmptyNegativ), "event",
-		(GtkSignalFunc)board_event_cb, app);
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.PieceEmptyNegativ), "event",
+		(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.PieceEmptyNegativ, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 
 
 	gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
@@ -376,9 +400,8 @@ goal_init_and_create(gint argc, gchar **argv)
 	app->ThemeList = NULL;
 
 	/* init gnome */
-	if(gnome_init(PACKAGE, VERSION, argc, argv) != 0)
-		g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: could not init gnome\n" , PACKAGE, __FILE__, __LINE__);
-
+       if((app->Goal = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv, GNOME_PARAM_NONE)) == NULL)
+	       g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: could not init gnome\n" , PACKAGE, __FILE__, __LINE__);
 
 	/* load the settings */
 	load_settings(app);
@@ -386,14 +409,20 @@ goal_init_and_create(gint argc, gchar **argv)
 	/* create the main window and concect it to signals */
 	if((app->gui.MainWindow = gnome_app_new(PACKAGE, "Goal")) == NULL)
 		g_error(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: could not create main window\n" , PACKAGE, __FILE__, __LINE__);
-	gtk_signal_connect(GTK_OBJECT(app->gui.MainWindow),
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.MainWindow),
 			"delete_event",
 			GTK_SIGNAL_FUNC(mainwindow_delete_event_cb),
-			app);
-	gtk_signal_connect(GTK_OBJECT(app->gui.MainWindow),
+			app);*/
+	g_signal_connect((gpointer)app->gui.MainWindow, "delete_event", 
+			G_CALLBACK(mainwindow_delete_event_cb), app);
+
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.MainWindow),
 			"destroy",
 			GTK_SIGNAL_FUNC(mainwindow_destroy_cb),
-			app);
+			app);*/
+	g_signal_connect((gpointer)app->gui.MainWindow, "destroy", 
+			G_CALLBACK(mainwindow_destroy_cb), app);
+
 
 	/* install the appbar */
 	if((app->gui.Appbar = gnome_appbar_new(FALSE, TRUE, GNOME_PREFERENCES_USER)) == NULL)
@@ -775,7 +804,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 	/* ---===---===---   load pixmaps into canvas   ---===---===--- */
 	/* --- Wallpaper --- */	
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapWallpaper)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapWallpaper, NULL)) == NULL)
 	{
 		return 1;
 	};
@@ -799,14 +828,17 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 			"y",0.0,
 			NULL);
 	/* connect to signal */
-/*	gtk_signal_connect(GTK_OBJECT(app->gui.Wallpaper), "event",
+	/*gtk_signal_connect(GTK_OBJECT(app->gui.Wallpaper), "event",
 			(GtkSignalFunc)board_event_cb, app);*/
+	g_signal_connect((gpointer)app->gui.Wallpaper, "event", 
+			G_CALLBACK(board_event_cb), app);
+
 	
 	gdk_pixbuf_unref(buff);	 
 	gdk_pixbuf_unref(buff_scal);	 
 	
 	/* --- Piece (normal) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNormal)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNormal, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -830,7 +862,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 
 	/* --- Piece (empty) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmpty, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -855,7 +887,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 	
 	/* --- Piece (marked) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceMarked)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceMarked, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -878,7 +910,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);
 
 	/* --- Piece (touched) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceTouched)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceTouched, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -901,7 +933,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);
 
 	/* --- Piece (negativ) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNegativ)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceNegativ, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -925,7 +957,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 
 
 	/* --- Piece (empty positiv) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyPositiv)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyPositiv, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -948,7 +980,7 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gdk_pixbuf_unref(buff_scal);
 
 	/* --- Piece (empty negativ) --- */
-	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyNegativ)) == NULL)
+	if((buff = gdk_pixbuf_new_from_file(theme->PathToPixmapPieceEmptyNegativ, NULL)) == NULL)
 	{
 		return 3;
 	}
@@ -1049,4 +1081,56 @@ destroy_property_box_canvas_items(GoalApp *app)
 				
 }
 
+
+
+/**
+ * update_gui:
+ * @app:
+ * 
+ * function description:
+ *
+ * return values: nothing
+ */
+void
+update_gui(GoalApp *app)
+{
+	gint x, y;
+	
+	/* load the pixmaps */	
+		if(load_pixmaps(app))
+		{
+			g_warning(":: PACKAGE: %s :: FILE: %s :: LINE: %i :: error loading themes\n" , PACKAGE, __FILE__, __LINE__);
+		}
+
+	
+		/* --- update the gui --- */
+		/* hide the "helper" pieces */
+		gnome_canvas_item_hide(app->gui.PieceEmpty);
+		gnome_canvas_item_hide(app->gui.PieceMarked);
+		gnome_canvas_item_hide(app->gui.PieceTouched);
+		gnome_canvas_item_hide(app->gui.PieceNegativ);
+		gnome_canvas_item_hide(app->gui.PieceEmptyPositiv);
+		gnome_canvas_item_hide(app->gui.PieceEmptyNegativ);
+
+		/* set important variables */
+		app->game.JumpStartPosX = 0;
+		app->game.JumpStartPosY = 0;
+		app->game.MovePosX = 0;
+		app->game.MovePosY = 0;
+		app->game.JumpStarted = FALSE;
+	
+		for(x = 0; x < NUMBER_CELLS; x++)
+		{
+			for(y = 0; y < NUMBER_CELLS; y++)
+			{
+				if((app->game.CellStatus[x][y] != OCCUPIED) && (app->game.CellStatus[x][y] != UNKOWN))
+				{
+					gnome_canvas_item_hide(app->gui.PieceNormal[x][y]);
+					/*g_print("gui update x=%i-y=%i\n",x,y);*/
+				}
+
+			}
+		}
+
+}
 
