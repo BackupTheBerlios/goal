@@ -1,16 +1,12 @@
 dnl Goal - 2001 Dietze Sebastian
 
-AC_INIT(src/main.c)
-
+AC_INIT(goal,0.3,https://developer.berlios.de/bugs/?group_id=218)
+AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(config.h)
-
-AM_INIT_AUTOMAKE(goal, 0.2)
-
+AM_INIT_AUTOMAKE(AC_PACKAGE_NAME,AC_PACKAGE_VERSION)
 AM_MAINTAINER_MODE
-
-AM_ACLOCAL_INCLUDE(macros)
-
-GNOME_INIT
+             
+dnl old(?): GNOME_INIT
 
 AC_PROG_CC
 AC_ISC_POSIX
@@ -20,22 +16,27 @@ AC_HEADER_STDC
 GNOME_COMPILE_WARNINGS
 
 dnl GDK Pixbuf
-AM_PATH_GDK_PIXBUF(0.9.0, ,AC_MSG_ERROR([Need gdk-pixbuf-0.9.0 or later!]))
-EXTRA_GNOME_CFLAGS=`gnome-config --cflags gdk_pixbuf gnomecanvaspixbuf gdk_pixbuf_xlib libart`
-EXTRA_GNOME_LIBS=`gnome-config --libs gdk_pixbuf gnomecanvaspixbuf gdk_pixbuf_xlib libart`
+dnl old: AM_PATH_GDK_PIXBUF(0.9.0, ,AC_MSG_ERROR([Need gdk-pixbuf-0.9.0 or later!]))
+dnl old: EXTRA_GNOME_CFLAGS=`gnome-config --cflags gdk_pixbuf gnomecanvaspixbuf gdk_pixbuf_xlib libart`
+dnl old: EXTRA_GNOME_LIBS=`gnome-config --libs gdk_pixbuf gnomecanvaspixbuf gdk_pixbuf_xlib libart`
+dnl old: AC_SUBST(EXTRA_GNOME_CFLAGS)
+dnl old: AC_SUBST(EXTRA_GNOME_LIBS)
+
+pkg_modules="libgnomeui-2.0 libgnomecanvas-2.0 glib-2.0 gdk-pixbuf-xlib-2.0 gnome-desktop-2.0 libart-2.0 libgnome-2.0 gdk-x11-2.0"
+PKG_CHECK_MODULES(EXTRA_GNOME, [$pkg_modules])
 AC_SUBST(EXTRA_GNOME_CFLAGS)
 AC_SUBST(EXTRA_GNOME_LIBS)
+               
 
-
-dnl i18n, l10n stuff
+dnl GETTEXT i18n, l10n
+GETTEXT_PACKAGE=goal
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
 ALL_LINGUAS=""
-dnl AM_GNU_GETTEXT
-AM_GNOME_GETTEXT
+AM_GLIB_GNU_GETTEXT
 
 AC_OUTPUT([
 Makefile
-macros/Makefile
-intl/Makefile
 pixmaps/Makefile
 pixmaps/green/Makefile
 src/Makefile
