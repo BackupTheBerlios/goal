@@ -19,6 +19,14 @@ AC_HEADER_STDC
 
 GNOME_COMPILE_WARNINGS
 
+dnl GDK Pixbuf
+AM_PATH_GDK_PIXBUF(0.9.0, ,AC_MSG_ERROR([Need gdk-pixbuf-0.9.0 or later!]))
+EXTRA_GNOME_CFLAGS=`gnome-config --cflags gdk_pixbuf gnomecanvaspixbuf gdk_pixbuf_xlib libart`
+EXTRA_GNOME_LIBS=`gnome-config --libs gdk_pixbuf gnomecanvaspixbuf gdk_pixbuf_xlib libart`
+AC_SUBST(EXTRA_GNOME_CFLAGS)
+AC_SUBST(EXTRA_GNOME_LIBS)
+
+
 dnl i18n, l10n stuff
 ALL_LINGUAS=""
 AM_GNU_GETTEXT
