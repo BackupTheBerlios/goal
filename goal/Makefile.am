@@ -1,2 +1,2 @@
-SUBDIRS = macros intl pixmaps src
+SUBDIRS = macros intl pixmaps src po
 
