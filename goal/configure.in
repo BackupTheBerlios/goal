@@ -8,7 +8,9 @@ AM_MAINTAINER_MODE
              
 AC_PROG_CC
 AC_ISC_POSIX
+AM_PROG_CC_STDC
 AC_HEADER_STDC
+
 
 pkg_modules="libgnomeui-2.0 libgnomecanvas-2.0 glib-2.0 gdk-pixbuf-xlib-2.0 gnome-desktop-2.0 libart-2.0 libgnome-2.0 gdk-x11-2.0"
 PKG_CHECK_MODULES(EXTRA_GNOME, [$pkg_modules])
