@@ -433,6 +433,14 @@ make_move(GoalApp *app, gint from_x, gint from_y, gint to_x, gint to_y){
 void
 play(GoalApp *app, gint x, gint y)
 {
+	/*
+	 * ok, i know that is a very bad idea and hard to maintain to manage the
+	 * game this way. the better idea was to react on signals, but when i started
+	 * to code i choose this way
+	 *
+	 * Maybe one day i reconvert it to signals.
+	 * 
+	 */
 	
 	/* check if app is running in board_event_cb */
 	
@@ -543,6 +551,15 @@ play(GoalApp *app, gint x, gint y)
 void 
 show_board_hints(GoalApp *app, gint x, gint y)
 {
+
+ 	/*
+	 * ok, i know that is a very bad idea and hard to maintain to manage the
+	 * game this way. the better idea was to react on signals, but when i started
+	 * to code i choose this way
+	 *
+	 */
+
+	
 	if((app->game.MovePosX == x) && (app->game.MovePosY == y)) return;
 
 	
@@ -577,6 +594,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 							NULL);
 						gnome_canvas_item_show(app->gui.PieceTouched);
 						gnome_canvas_item_hide(app->gui.PieceEmpty);
+						gnome_appbar_clear_stack(GNOME_APPBAR(app->gui.Appbar));
 					}
 				}
 				else
@@ -599,6 +617,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 								"y", (double)(y * app->gui.PieceHeight),
 								NULL);
 							gnome_canvas_item_show(app->gui.PieceEmpty);
+							gnome_appbar_clear_stack(GNOME_APPBAR(app->gui.Appbar));
 						}
 					}
 					else
@@ -619,6 +638,7 @@ show_board_hints(GoalApp *app, gint x, gint y)
 								"y", (double)(y * app->gui.PieceHeight),
 								NULL);
 							gnome_canvas_item_show(app->gui.PieceEmpty);
+							gnome_appbar_clear_stack(GNOME_APPBAR(app->gui.Appbar));
 						}
 
 					}
@@ -677,6 +697,7 @@ terminate_game(GoalApp *app)
 {
 	gint number_of_pieces;	
 	gchar *msg;
+	gint ret;
 
 	
 	app->game.GameIsRunning = FALSE;
@@ -689,7 +710,7 @@ terminate_game(GoalApp *app)
 	/* build the message string */
 	if(number_of_pieces == 1)
 		if(app->game.GameType == SOLITAIRE)
-			msg = g_strdup_printf(_("Game finished.\nYou left %i piece on the board.\nYou are a Solitaire champion!Start a new game?"), number_of_pieces);
+			msg = g_strdup_printf(_("Game finished.\nYou left %i piece on the board.\nYou are a Solitaire champion!\nStart a new game?"), number_of_pieces);
 		else
 			msg = g_strdup_printf(_("Game finished.\nYou left %i piece on the board.\nStart a new game?"), number_of_pieces);
 	else
@@ -706,6 +727,30 @@ terminate_game(GoalApp *app)
 	
 	gtk_widget_show(app->gui.GameFinishedMsgBox);
 
+	gtk_window_set_modal(GTK_WINDOW(app->gui.GameFinishedMsgBox), TRUE);
+	
+	ret = gnome_dialog_run(GNOME_DIALOG(app->gui.GameFinishedMsgBox));
+
+	switch (ret)
+	{
+		case 0 : /* YES button pressed */
+			init_new_game(app);
+			app->game.GameIsRunning = TRUE;
+			app->game.JumpStarted = FALSE;
+			if(app->game.GameType == SOLITAIRE)
+				app->game.FirstPieceRemoved = FALSE;
+			else
+				app->game.FirstPieceRemoved = TRUE;
+
+			/* set text to appbar */
+			gnome_appbar_set_status(GNOME_APPBAR(app->gui.Appbar), _("New game started."));
+
+			break;
+		case 1 : /* NO button pressed */
+			break;
+		default: /* dialog closed by window manager */
+			break;
+	}
 }
 
 

@@ -749,7 +749,11 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	gint height,
 		width,
 		height_bg,
-		width_bg;
+		width_bg,
+		prev_h = 350,
+		prev_w = 350;
+	gfloat height_scale = 2.0,
+		width_scale = 2.0;
 	gchar *theme_name;
 	
 	
@@ -777,9 +781,14 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	{
 		return 1;
 	};
+	
+	/* get scale factor */
+	height_scale = (gfloat) prev_h / gdk_pixbuf_get_height(buff);
+	width_scale = (gfloat) prev_w / gdk_pixbuf_get_width(buff);
+	
 	/* get height and width */
-	height_bg = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width_bg = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height_bg = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width_bg = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 	
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width_bg, height_bg, GDK_INTERP_NEAREST);
@@ -805,8 +814,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);
@@ -829,8 +838,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);
@@ -854,8 +863,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);
@@ -877,8 +886,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);
@@ -900,8 +909,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);
@@ -924,8 +933,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);
@@ -947,8 +956,8 @@ put_theme_to_preview_canvas(GoalApp *app, gint theme_number)
 	}
 	
 	/* get height and width */
-	height = (gint) gdk_pixbuf_get_height(buff) / 2;
-	width = (gint) gdk_pixbuf_get_width(buff) / 2;
+	height = (gint) gdk_pixbuf_get_height(buff) * height_scale;
+	width = (gint) gdk_pixbuf_get_width(buff) * width_scale;
 
 	/* scalling */
 	buff_scal = gdk_pixbuf_scale_simple(buff, width, height, GDK_INTERP_NEAREST);

@@ -51,9 +51,9 @@ create_PropertyBox(GoalApp *app)
 	gtk_widget_show (hbox1);
 	gtk_container_add (GTK_CONTAINER (NotebookTheme), hbox1);
 
-  vbox1 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_set_name (vbox1, "vbox1");
-  gtk_widget_ref (vbox1);
+	vbox1 = gtk_vbox_new (FALSE, 0);
+	gtk_widget_set_name (vbox1, "vbox1");
+	gtk_widget_ref (vbox1);
   gtk_object_set_data_full (GTK_OBJECT (app->gui.PropertyBox), "vbox1", vbox1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox1);
@@ -65,7 +65,7 @@ create_PropertyBox(GoalApp *app)
   gtk_object_set_data_full (GTK_OBJECT (app->gui.PropertyBox), "hbox2", hbox2,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox2);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox2, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox1), hbox2, FALSE, FALSE, GOAL_PROP_BOX_PAD);
 
   /* --- button left --- */
   app->gui.PropertyBoxButtonLeft= gtk_button_new();
@@ -117,7 +117,7 @@ create_PropertyBox(GoalApp *app)
   gtk_object_set_data_full (GTK_OBJECT (app->gui.PropertyBox), "scrolledwindow1", scrolledwindow1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow1);
-  gtk_box_pack_start (GTK_BOX (vbox1), scrolledwindow1, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox1), scrolledwindow1, TRUE, TRUE, GOAL_PROP_BOX_PAD);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 
   /* --- canvas --- */

@@ -6,6 +6,9 @@
 #include "typedefs.h"
 
 
+#define GOAL_PROP_BOX_PAD 5
+
+
 void create_PropertyBox(GoalApp *app);
 
 
