@@ -1,4 +1,5 @@
 #include <config.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "typedefs.h"
 #include "helpers.h"
 #include "callbacks.h"
@@ -112,6 +113,24 @@ load_settings(GoalApp *app)
 	g_print("PathToPixmapPieceEmptyNegativ: %s\n", app->settings.PathToPixmapPieceEmptyNegativ);
 	g_print("GameType: %i\n", app->game.GameType);
 	
+}
+
+
+
+gboolean
+load_pixmaps(GoalApp *app)
+{
+	gboolean load_all = TRUE;
+	
+
+	if((app->tmp.Wallpaper = gdk_pixbuf_new_from_file(app->settings.PathToPixmapWallpaper)) == NULL)
+	{
+		load_all = FALSE;
+	}
+
+	
+
+	return load_all;
 }
 
 
