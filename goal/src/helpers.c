@@ -65,33 +65,33 @@ load_settings(GoalApp *app)
 	tmp1 = g_strconcat("goal/", "piece.png", NULL);
 	filename = gnome_unconditional_pixmap_file(tmp1);
 	tmp2 = g_strconcat("/goal/pieceicon/filename=", filename, NULL);
-	app->settings.PathToPixmapPieceNormal = "/home/sebastian/projects/goal/pixmaps/piece_normal.png";/*gnome_config_get_string(tmp2); */
+	app->settings.PathToPixmapPieceNormal = "../pixmaps/piece_normal.png";/*gnome_config_get_string(tmp2); */
 	g_free(tmp1);
 	g_free(tmp2);
 	g_free(filename);
 
 	/* piece pixmap (marked) */
-	app->settings.PathToPixmapPieceMarked = "/home/sebastian/projects/goal/pixmaps/piece_marked.png";
+	app->settings.PathToPixmapPieceMarked = "../pixmaps/piece_marked.png";
 
 	/* piece pixmap (touched) */	
-	app->settings.PathToPixmapPieceTouched = "/home/sebastian/projects/goal/pixmaps/piece_touched.png";
+	app->settings.PathToPixmapPieceTouched = "../pixmaps/piece_touched.png";
 
 
 	/* piece pixmap (negativ) */	
-	app->settings.PathToPixmapPieceNegativ = "/home/sebastian/projects/goal/pixmaps/piece_negativ.png";
+	app->settings.PathToPixmapPieceNegativ = "../pixmaps/piece_negativ.png";
 	
 	/* piece pixmap (empty positiv) */	
-	app->settings.PathToPixmapPieceEmptyPositiv = "/home/sebastian/projects/goal/pixmaps/piece_empty_positiv.png";
+	app->settings.PathToPixmapPieceEmptyPositiv = "../pixmaps/piece_empty_positiv.png";
 
 	/* piece pixmap (emptiy negativ) */	
-	app->settings.PathToPixmapPieceEmptyNegativ = "/home/sebastian/projects/goal/pixmaps/piece_empty_negativ.png";
+	app->settings.PathToPixmapPieceEmptyNegativ = "../pixmaps/piece_empty_negativ.png";
 
 	
 	/* wallpaper pixmap */	
 	tmp1 = g_strconcat("goal/", "wallpaper.png", NULL);
 	filename = gnome_unconditional_pixmap_file(tmp1);
 	tmp2 = g_strconcat("/goal/wallpaper/filename=", filename, NULL);
-	app->settings.PathToPixmapWallpaper = "/home/sebastian/projects/goal/pixmaps/wallpaper.png";/*gnome_config_get_string(tmp2);*/ 
+	app->settings.PathToPixmapWallpaper = "../pixmaps/wallpaper.png";/*gnome_config_get_string(tmp2);*/ 
 	g_free(tmp1);
 	g_free(tmp2);
 	g_free(filename);
