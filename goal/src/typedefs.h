@@ -41,52 +41,37 @@ typedef struct
 	{
 		GtkWidget *MainWindow,
 			*Appbar,
-			*AboutDialog,
+			*AboutDlg,
+			*NewGameDlg,
 			*Canvas,
 			*ExitMsgBox;
 
-		GnomeCanvasItem *Wallpaper;
-		
-		struct
-		{
-			GnomeCanvasItem *PieceNormal, /* the normal piece */
-				*PieceMarked,         /* the selected piece, with this piece you will jump */
-				*PieceTouched,        /* only cosmetic, highlight the piece if no move is selectet */
-				*PieceNegativ,        /* you can not jump onto this place */
-				*PieceEmptyPositiv,   /* found an empty place, jump !!!!!!! */
-				*PieceEmptyNegativ;   /* found an empty place, but you can not jump e.q. diagonal for example*/
-
-		}board[NUMBER_CELLS][NUMBER_CELLS];
-	} gui;
-
-
+		GnomeCanvasItem *Wallpaper,
+			*PieceNormal[NUMBER_CELLS][NUMBER_CELLS], /* the "normal" piece */
+			*PieceMarked,         /* the selected piece, with this piece you will jump */
+			*PieceTouched,        /* only cosmetic, highlight the piece if no move is selectet */
+			*PieceNegativ,        /* you can not jump onto this place */
+			*PieceEmptyPositiv,   /* found an empty place, jump !!!!!!! */
+			*PieceEmptyNegativ;   /* found an empty place, but you can not jump */
+			
+			
+		gint WallpaperHeight, WallpaperWidth;
+		gint PieceHeight, PieceWidth;
 	
-	/* helper variables */
-	struct
-	{
-		GdkPixbuf *Wallpaper,
-			*PieceNormal,
-			*PieceMarked,
-			*PieceTouched,
-			*PieceNegativ,
-			*PieceEmptyPositiv,
-			*PieceEmptyNegativ;
-		
-	} tmp;
+	} gui;
 	
 	
 	
 	/* the game management */
 	struct
 	{
-		gboolean GameIsRunning;
-		gint GameType;
-
-		struct
-		{
-			gint CellStatus;
-
-		}borad[NUMBER_CELLS][NUMBER_CELLS];
+		gboolean GameIsRunning,
+			FirstPieceRemoved,
+			JumpStarted;
+		gint GameType,
+			JumpStartPosX,
+			JumpStartPosY;
+		gint CellStatus[NUMBER_CELLS][NUMBER_CELLS];
 
 	} game;
 

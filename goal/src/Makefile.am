@@ -9,7 +9,9 @@ bin_PROGRAMS = goal
 goal_SOURCES = 		\
 	main.c          \
 	helpers.c       \
-	callbacks.c      
+	callbacks.c     \
+	property.c 	\
+	game.c
 
 goal_LDADD = $(GNOME_LIBDIR) $(GNOMEUI_LIBS) $(INTLLIBS) @EXTRA_GNOME_LIBS@
 

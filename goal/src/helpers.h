@@ -6,7 +6,6 @@
 
 
 GoalApp* goal_init_and_create(gint argc, gchar **argv);
-gboolean load_pixmaps(GoalApp *app);
-
+gint load_pixmaps(GoalApp *app);
 	
 #endif /* __GOAL_HELPERS_H__ */
