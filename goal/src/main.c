@@ -11,8 +11,14 @@ main(gint argc, gchar **argv)
 
 
 	/* i18n */
-	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
+	/*bindtextdomain(PACKAGE, GNOMELOCALEDIR);
+	textdomain(PACKAGE);*/
+#ifdef ENABLE_NLS
+	bindtextdomain(PACKAGE, EXTRA_GNOME_LOCALE_DIR);
+	bind_textdomain_codeset(PACKAGE, "UTF-8");
 	textdomain(PACKAGE);
+#endif
+
 
 	app = goal_init_and_create(argc, argv);
 

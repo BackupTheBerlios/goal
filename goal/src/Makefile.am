@@ -1,8 +1,10 @@
 ## Goal
 
-INCLUDES = -I. -I$(srcdir) -I$(srcdir)/../pixmaps			\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\" \
-	-I$(includedir) $(GNOME_INCLUDEDIR) @EXTRA_GNOME_CFLAGS@
+INCLUDES = \
+	-DEXTRA_GNOME_DATA_DIR=\""$(datadir)"\" \
+	-DEXTRA_GNOME_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	@EXTRA_GNOME_CFLAGS@
+
 
 bin_PROGRAMS = goal 
 
@@ -18,9 +20,5 @@ goal_SOURCES = 		\
 	game.h		\
 	typedefs.h
 
-goal_LDADD = $(GNOME_LIBDIR) $(GNOMEUI_LIBS) $(INTLLIBS) @EXTRA_GNOME_LIBS@
-
-#pixmapdir = $(datadir)/pixmaps
-
-#EXTRA_DIST = pharmacy.desktop agent.h checkout.h preferences.h console.h\
+goal_LDADD = $(INTLLIBS) @EXTRA_GNOME_LIBS@
 
