@@ -1,4 +1,6 @@
-EXTRA_DIST = \
+pixmapdir = $(datadir)/goal/green
+
+pixmap_DATA = \
 	piece_empty.png \
 	piece_empty_negativ.png \
 	piece_empty_positiv.png \
@@ -8,9 +10,7 @@ EXTRA_DIST = \
 	piece_touched.png \
 	wallpaper.png
 
-pixmapdir = $(datadir)/goal/green
-
-pixmap_DATA = \
+EXTRA_DIST = \
 	piece_empty.png \
 	piece_empty_negativ.png \
 	piece_empty_positiv.png \

@@ -36,5 +36,7 @@ Makefile
 macros/Makefile
 intl/Makefile
 pixmaps/Makefile
+pixmaps/green/Makefile
 src/Makefile
+po/Makefile.in
 ])
