@@ -78,7 +78,7 @@ load_settings(GoalApp *app)
 
 
 	/* piece pixmap (negativ) */	
-	app->settings.PathToPixmapPieceNegativ = "/home/sebastian/projects/goal/pixmaps/piece_negativi.png";
+	app->settings.PathToPixmapPieceNegativ = "/home/sebastian/projects/goal/pixmaps/piece_negativ.png";
 	
 	/* piece pixmap (empty positiv) */	
 	app->settings.PathToPixmapPieceEmptyPositiv = "/home/sebastian/projects/goal/pixmaps/piece_empty_positiv.png";
