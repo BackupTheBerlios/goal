@@ -1,4 +1,4 @@
-add po/ in configure.in and Makefile.am
-autogen.sh
-looking for or drawing a very nice logo+wallpaper+piece for goal
-
+*drawing a very nice logo+wallpaper+piece for goal
+*add GError to gdk_pixbuf_new_from_file (helpers.c)
+*found a bug, but can't reproduce it(some times don't detect the end of the game)
+*switch to gconf
